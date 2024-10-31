@@ -1,6 +1,6 @@
-# Welcome to your Expo app 👋
+# Welcome to Recipea App 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a project for a Recipe Book Keeper allowing you to house all of your favorite recipes 
 
 ## Get started
 

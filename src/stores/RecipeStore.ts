@@ -12,6 +12,9 @@ export class RecipeStore {
   selectedRecipe: RecipeModel | null = null;
   recipeDetails: any = {};
   ingredientList: Ingredient[] = [];
+  filteredRecipes: RecipeModel[] = [];
+
+  selectedTags: string[] = [];
 
   constructor(root: RootStore) {
     this.root = root;
@@ -22,15 +25,22 @@ export class RecipeStore {
     const response = await service.getRecipes();
 
     if (response) {
-      console.log(response);
       runInAction(() => {
         this.recipes = response ?? [];
+        this.filteredRecipes = this.recipes;
       });
     }
   }
 
+  async searchRecipes(searchTerm: string) {
+    runInAction(() => {
+      this.filteredRecipes = this.recipes.filter((recipe) =>
+        recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+  }
+
   async createRecipe(recipe: RecipeModel) {
-    console.log(recipe, this.root.auth.user?.Id);
     try {
       const response = await service.createRecipe(recipe);
       if (response) {
@@ -61,6 +71,17 @@ export class RecipeStore {
   selectRecipe(recipe: RecipeModel) {
     runInAction(() => {
       this.selectedRecipe = recipe;
+    });
+  }
+
+  setSelectedTags(tags: string[]) {
+    runInAction(() => {
+      this.selectedTags = tags;
+      this.filteredRecipes = this.recipes.filter((recipe) => {
+        if (tags.length === 0) return true;
+
+        return tags.some((tag) => recipe.cuisine.includes(tag));
+      });
     });
   }
 }

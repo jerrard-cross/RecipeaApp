@@ -34,7 +34,7 @@ export class RecipeStore {
 
   async searchRecipes(searchTerm: string) {
     runInAction(() => {
-      this.filteredRecipes = this.recipes.filter((recipe) =>
+      this.filteredRecipes = this.filteredRecipes.filter((recipe) =>
         recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     });

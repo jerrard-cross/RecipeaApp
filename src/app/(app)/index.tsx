@@ -4,16 +4,17 @@ import {
   Button,
   ButtonText,
   HStack,
-  Image,
   Text,
   View,
   VStack,
   Box,
   Heading,
-  SafeAreaView,
   LinearGradient,
   Avatar,
   FlatList,
+  StatusBar,
+  AvatarFallbackText,
+  AvatarImage,
 } from "@gluestack-ui/themed";
 import { useAuthStore, useRecipeStore } from "@/src/stores";
 import { observer } from "mobx-react-lite";
@@ -22,19 +23,18 @@ import Carousel from "react-native-reanimated-carousel";
 import { Dimensions } from "react-native";
 import palette from "@/src/constants/palette";
 import { LinearGradient as ExpoLinearGradient } from "expo-linear-gradient";
-import Animated, {
-  SharedTransition,
-  SharedTransitionType,
-  withSpring,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+
 import { Pressable } from "@gluestack-ui/themed";
+import { useSession } from "@/src/providers/SessionProvider";
+import { Menu } from "lucide-react-native";
+import { ButtonIcon } from "@gluestack-ui/themed";
 
 const HomeScreen = observer(() => {
-  const { signOut, user } = useAuthStore();
+  const { signOut, user } = useSession();
   const { getRecipes, selectRecipe, recipes, selectedRecipe } =
     useRecipeStore();
   const width = Dimensions.get("window").width;
-  const height = Dimensions.get("window").height;
 
   const recipeTags = useMemo<string[]>(() => {
     if (!recipes) {
@@ -43,42 +43,43 @@ const HomeScreen = observer(() => {
     return [...new Set(recipes.map((item) => item.cuisine).flat())];
   }, [recipes]);
 
-  const transition = SharedTransition.custom((values) => {
-    "worklet";
-    return {
-      height: withSpring(values.targetHeight),
-      width: withSpring(values.targetWidth),
-    };
-  })
-    .progressAnimation((values, progress) => {
-      "worklet";
-      const getValue = (
-        progress: number,
-        target: number,
-        current: number
-      ): number => {
-        return progress * (target - current) + current;
-      };
-      return {
-        width: getValue(progress, values.targetWidth, values.currentWidth),
-        height: getValue(progress, values.targetHeight, values.currentHeight),
-      };
-    })
-    .defaultTransitionType(SharedTransitionType.ANIMATION);
-
   useEffect(() => {
     Promise.all([getRecipes()]);
   }, []);
 
   useEffect(() => {
-    console.log("recipes", selectedRecipe);
+    console.log("recipes", user);
   }, [selectedRecipe]);
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
-      <VStack space="xl" flex={1} py={"$10"}>
+      <StatusBar barStyle="dark-content" />
+      <VStack space="xl" flex={1} py={"$10"} mt={"$8"}>
         <VStack gap={"$2"} px={"$4"}>
-          <Avatar />
+          <HStack justifyContent="space-between">
+            <Pressable onPress={() => signOut()}>
+              <Avatar
+                bgColor={palette.primary}
+                size="md"
+                borderRadius={"$full"}
+              >
+                <AvatarFallbackText>
+                  {user?.firstName} {user?.lastName}
+                </AvatarFallbackText>
+                <AvatarImage
+                  source={{ uri: user?.image }}
+                  alt={`${user?.firstName} ${user?.lastName}`}
+                />
+              </Avatar>
+            </Pressable>
+            <Button
+              onPress={() => router.navigate("/add-recipe")}
+              variant="link"
+              size="xl"
+            >
+              <ButtonIcon as={Menu} color={palette.primaryDark} />
+            </Button>
+          </HStack>
 
           <MyRecipes />
 

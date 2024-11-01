@@ -6,8 +6,8 @@ import SearchRecipes from "./SearchRecipes";
 const MyRecipes = () => {
   const [searchText, setSearchText] = useState("");
   return (
-    <VStack gap={"$4"}>
-      <SectionTitle title="My Recipes" />
+    <VStack gap={"$4"} mt={"$4"}>
+      <SectionTitle title="Let's get cooking" />
       <SearchRecipes
         placeholder="Search My Recipes"
         value={searchText}

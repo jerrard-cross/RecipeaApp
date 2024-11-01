@@ -26,7 +26,6 @@ const Auth = observer(() => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { signIn } = useSession();
-  const { signInWithUsername } = useAuthStore();
   const handleState = () => {
     setShowPassword((showState) => {
       return !showState;
@@ -35,7 +34,6 @@ const Auth = observer(() => {
 
   const handleSubmit = () => {
     signIn(username, password);
-    router.navigate("/(app)");
   };
 
   return (

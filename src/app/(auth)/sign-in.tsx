@@ -18,7 +18,7 @@ import { observer } from "mobx-react-lite";
 import { useSession } from "@/src/providers/SessionProvider";
 
 const AuthScreen = observer(() => {
-  const { session } = useSession();
+  const { session, refreshUser } = useSession();
 
   useEffect(() => {
     if (session) {

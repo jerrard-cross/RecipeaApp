@@ -12,6 +12,18 @@ export class AuthService extends BaseService {
       password,
     });
 
-    return mapResponseToInstance(UserModel)(data);
+    let user = new UserModel(data);
+
+    return user;
+  }
+
+  async refreshUser(refreshToken: string): Promise<UserModel | null> {
+    let { data } = await this.post("/user/refresh", {
+      refreshToken,
+    });
+
+    let user = new UserModel(data);
+
+    return user;
   }
 }

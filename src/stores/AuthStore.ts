@@ -1,14 +1,25 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { UserModel } from "../models/UserModel";
 import { RootStore } from "./RootStore";
 import { supabase } from "../lib/supabase";
 import { AuthService } from "./api/AuthService";
+import { apiClient, getURL } from "./api/BaseService";
+
+export const authStoreReaction = (auth: AuthStore) => {
+  reaction(
+    () => auth.gatewayURL,
+    async (gatewayURL) => {
+      apiClient.defaults.baseURL = await gatewayURL;
+    }
+  );
+};
 
 const api = new AuthService();
 
 export class AuthStore {
   root: RootStore;
   user: UserModel | null = null;
+  gatewayURL = getURL();
 
   isLoading = false;
 
@@ -27,22 +38,6 @@ export class AuthStore {
     return supabase.auth.getSession();
   }
 
-  setSession(session: any) {
-    runInAction(() => {
-      this.user = session?.user
-        ? UserModel.fromJson({
-            id: session.user.id,
-            email: session.user.email,
-            name: session.user.user_metadata.full_name,
-            phone: session.user.user_metadata.phone,
-            providers: session.user.provider_type,
-            created_at: session.user.created_at,
-            last_sign_in_at: session.user.last_sign_in_at,
-          })
-        : null;
-    });
-  }
-
   async updateUserData(user: UserModel) {
     const { error } = await supabase.from("Users").upsert(user);
 
@@ -51,12 +46,21 @@ export class AuthStore {
     }
   }
 
-  async signInWithEmail(email: string, password: string) {
+  async signInWithUsername(username: string, password: string) {
     // Call the login method from the supabase client
     // and set the user to the result
-    this.setIsLoading(true);
-    const user = await api.loginUser(email, password);
-    this.setIsLoading(false);
+    try {
+      this.setIsLoading(true);
+      const user = await api.loginUser(username, password);
+
+      if (user) {
+        this.setSession(user);
+      }
+
+      this.setIsLoading(false);
+    } catch (error) {
+      throw new Error("Error signing in:");
+    }
   }
 
   async signUpWithEmail(email: string, password: string) {

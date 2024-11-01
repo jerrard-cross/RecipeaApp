@@ -9,6 +9,8 @@ const service = new RecipeService();
 export class RecipeStore {
   root: RootStore;
   recipes: RecipeModel[] = [];
+  selectedRecipe: RecipeModel | null = null;
+  recipeDetails: any = {};
   ingredientList: Ingredient[] = [];
 
   constructor(root: RootStore) {
@@ -16,8 +18,8 @@ export class RecipeStore {
     makeAutoObservable(this, undefined, { autoBind: true });
   }
 
-  async getRecipes(userId: string) {
-    const response = await service.getRecipes(userId);
+  async getRecipes() {
+    const response = await service.getRecipes();
 
     if (response) {
       console.log(response);
@@ -54,5 +56,11 @@ export class RecipeStore {
         this.ingredientList = response ?? [];
       });
     }
+  }
+
+  selectRecipe(recipe: RecipeModel) {
+    runInAction(() => {
+      this.selectedRecipe = recipe;
+    });
   }
 }

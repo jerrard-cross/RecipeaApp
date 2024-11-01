@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   ButtonText,
+  Image,
   Input,
   InputField,
   Text,
@@ -14,33 +15,28 @@ import { supabase } from "@/src/lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import { useAuthStore } from "@/src/stores";
 import { observer } from "mobx-react-lite";
+import { useSession } from "@/src/providers/SessionProvider";
 
 const AuthScreen = observer(() => {
-  const { setSession, session, user } = useAuthStore();
+  const { session } = useSession();
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (user) {
+    if (session) {
       router.navigate("/(app)");
     }
-
-    if (!user) {
-      router.navigate("/signin");
+    if (!session) {
+      router.navigate("/sign-in");
     }
-  }, [user]);
+  }, [session]);
   return (
-    <View h="$full" justifyContent="center" alignItems="center" gap={"$2"}>
+    <View h="$full" alignItems="center" gap={"$2"} mt={"$10"}>
+      <Image
+        source={require("@/assets/images/recipea-logo.png")}
+        alt="Recipea Logo"
+        h="$56"
+        w="$56"
+      />
       <Auth />
-      {user && <Text>{user.Email}</Text>}
     </View>
   );
 });

@@ -4,24 +4,32 @@ import { IngredientsModel } from "./IngredientsModel";
 export class RecipeModel extends BaseModel {
   name: string;
   description: string;
-  ingredients: IngredientsModel[];
-  instructions: string;
+  ingredients: string[];
+  instructions: string[];
+  prepTimeMinutes: number;
+  cookTimeMinutes: number;
+  mealType: string[];
   image: string;
-  category: string;
-  time: string;
-  servings: string;
-  user_id?: string;
+  rating: number;
+  servings: number;
+  tags: string[];
+  cuisine: string;
+  userId?: string;
 
   constructor(results: any = {}) {
     super();
-    this.name = results.name ?? "";
-    this.description = results.description ?? "";
-    this.ingredients = results.ingredients ?? [];
-    this.instructions = results.instructions ?? "";
-    this.image = results.image ?? "";
-    this.category = results.category ?? "";
-    this.time = results.time ?? "";
-    this.servings = results.servings ?? "";
-    this.user_id = results.user_id ?? "";
+    this.name = results.Name;
+    this.description = results.Description;
+    this.ingredients = results.Ingredients;
+    this.instructions = results.Instructions;
+    this.prepTimeMinutes = results.PrepTimeMinutes;
+    this.cookTimeMinutes = results.CookTimeMinutes;
+    this.mealType = results.MealType;
+    this.image = results.Image;
+    this.rating = results.Rating;
+    this.servings = results.Servings;
+    this.tags = results.Tags;
+    this.cuisine = results.Cuisine;
+    this.userId = results.UserId;
   }
 }

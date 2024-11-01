@@ -8,7 +8,7 @@ type SectionTitleProps = {
 
 const SectionTitle = ({ title }: SectionTitleProps) => {
   return (
-    <Heading fontSize={"$3xl"} bold>
+    <Heading fontSize={"$xl"} bold>
       {title}
     </Heading>
   );

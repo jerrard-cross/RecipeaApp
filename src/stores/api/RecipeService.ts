@@ -6,15 +6,21 @@ import {
   MeasurementType,
 } from "@/src/models/IngredientsModel";
 import { RecipeModel } from "@/src/models/RecipeModel";
+import { BaseService } from "./BaseService";
 
-export class RecipeService {
+export class RecipeService extends BaseService {
   // Recipes
-  async getRecipes(userId: string) {
-    return supabase
-      .from("recipes")
-      .select()
-      .eq("user_id", userId)
-      .then(mapResponseToArray(RecipeModel));
+  async getRecipes() {
+    //Dummy data
+    let { response } = await this.get("/recipes?limit=10");
+    return response.data.recipes as RecipeModel[];
+
+    // Supabase setup
+    // return supabase
+    //   .from("recipes")
+    //   .select()
+    //   .eq("user_id", userId)
+    //   .then(mapResponseToArray(RecipeModel));
   }
 
   async createRecipe(recipe: RecipeModel) {

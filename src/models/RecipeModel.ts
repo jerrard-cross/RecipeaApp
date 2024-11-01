@@ -3,7 +3,6 @@ import { IngredientsModel } from "./IngredientsModel";
 
 export class RecipeModel extends BaseModel {
   name: string;
-  description: string;
   ingredients: string[];
   instructions: string[];
   prepTimeMinutes: number;
@@ -13,23 +12,24 @@ export class RecipeModel extends BaseModel {
   rating: number;
   servings: number;
   tags: string[];
+  difficulty: string;
   cuisine: string;
   userId?: string;
 
   constructor(results: any = {}) {
     super();
-    this.name = results.Name;
-    this.description = results.Description;
-    this.ingredients = results.Ingredients;
-    this.instructions = results.Instructions;
-    this.prepTimeMinutes = results.PrepTimeMinutes;
-    this.cookTimeMinutes = results.CookTimeMinutes;
-    this.mealType = results.MealType;
-    this.image = results.Image;
-    this.rating = results.Rating;
-    this.servings = results.Servings;
-    this.tags = results.Tags;
-    this.cuisine = results.Cuisine;
-    this.userId = results.UserId;
+    this.name = results.name;
+    this.ingredients = results.ingredients;
+    this.instructions = results.instructions;
+    this.prepTimeMinutes = results.prepTimeMinutes;
+    this.cookTimeMinutes = results.cookTimeMinutes;
+    this.mealType = results.mealType;
+    this.image = results.image;
+    this.rating = results.rating;
+    this.servings = results.servings;
+    this.tags = results.tags;
+    this.difficulty = results.difficulty;
+    this.cuisine = results.cuisine;
+    this.userId = results.userId;
   }
 }

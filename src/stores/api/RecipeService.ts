@@ -12,8 +12,10 @@ export class RecipeService extends BaseService {
   // Recipes
   async getRecipes() {
     //Dummy data
-    let { response } = await this.get("/recipes?limit=10");
-    return response.data.recipes as RecipeModel[];
+    let { data }: { data: { recipes: RecipeModel[] } } = await this.get(
+      "/recipes?limit=10"
+    );
+    return data.recipes.map((recipe: RecipeModel) => new RecipeModel(recipe));
 
     // Supabase setup
     // return supabase

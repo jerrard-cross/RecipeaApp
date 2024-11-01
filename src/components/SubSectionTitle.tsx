@@ -10,10 +10,10 @@ import { LucideIcon } from "lucide-react-native";
 
 type SubSectionTitleProps = {
   title: string;
-  hasButton: boolean;
-  buttonTitle: string;
-  buttonAction: () => void;
-  buttonIcon: LucideIcon;
+  hasButton?: boolean;
+  buttonTitle?: string;
+  buttonAction?: () => void;
+  buttonIcon?: LucideIcon;
 };
 
 const SubSectionTitle = ({
@@ -24,14 +24,14 @@ const SubSectionTitle = ({
   buttonAction,
 }: SubSectionTitleProps) => {
   return (
-    <HStack justifyContent="space-between" alignItems="center" mb={"$4"}>
+    <HStack justifyContent="space-between" alignItems="center" my={"$4"}>
       <Text size="xl" fontWeight="$bold">
         {title}
       </Text>
 
       {hasButton && (
         <Button
-          onPress={() => buttonAction()}
+          onPress={() => buttonAction && buttonAction()}
           backgroundColor="$green600"
           size="sm"
         >

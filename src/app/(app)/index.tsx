@@ -8,6 +8,8 @@ import MyRecipes from "@/src/components/MyRecipes";
 import RecipeTags from "@/src/components/RecipeTags";
 import RecipeItems from "@/src/components/RecipeItems";
 import AuthHeader from "@/src/components/AuthHeader";
+import AddRecipeButton from "@/src/components/AddRecipeButton";
+import { SafeAreaView } from "@gluestack-ui/themed";
 
 const HomeScreen = observer(() => {
   const { getRecipes, selectRecipe, recipes } = useRecipeStore();
@@ -24,10 +26,10 @@ const HomeScreen = observer(() => {
   }, []);
 
   return (
-    <>
+    <SafeAreaView flex={1}>
       <Stack.Screen options={{ headerShown: false }} />
       <StatusBar barStyle="dark-content" />
-      <VStack space="xl" flex={1} py={"$10"} mt={"$8"}>
+      <VStack space="xl" flex={1} py={"$10"}>
         <VStack gap={"$2"} px={"$4"}>
           <AuthHeader />
           <MyRecipes />
@@ -35,8 +37,11 @@ const HomeScreen = observer(() => {
         </VStack>
 
         <RecipeItems selectRecipe={selectRecipe} />
+        <VStack justifyContent="center" alignItems="center" w="$full">
+          <AddRecipeButton />
+        </VStack>
       </VStack>
-    </>
+    </SafeAreaView>
   );
 });
 

@@ -41,20 +41,9 @@ export class RecipeStore {
   }
 
   async createRecipe(recipe: RecipeModel) {
-    try {
-      const response = await service.createRecipe(recipe);
-      if (response) {
-        console.log(response);
-        runInAction(() => {
-          this.recipes.push(...response);
-        });
-        return;
-      } else {
-        console.error("Error creating recipe");
-      }
-    } catch (error) {
-      console.error("Error creating recipe:", error);
-    }
+    runInAction(() => {
+      this.recipes.push(new RecipeModel(recipe));
+    });
   }
 
   async getIngredientList() {

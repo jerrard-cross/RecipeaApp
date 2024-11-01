@@ -10,6 +10,7 @@ import {
   VStack,
   ButtonText,
   ModalBackdrop,
+  SafeAreaView,
 } from "@gluestack-ui/themed";
 import { DimensionValue, Platform, StyleSheet } from "react-native";
 

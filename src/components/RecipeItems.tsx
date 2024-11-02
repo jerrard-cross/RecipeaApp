@@ -39,8 +39,8 @@ const RecipeItems = observer(({ selectRecipe }: RecipeItemsProps) => {
       scrollAnimationDuration={500}
       mode="parallax"
       modeConfig={{
-        parallaxScrollingScale: 0.8,
-        parallaxScrollingOffset: 90,
+        parallaxScrollingScale: 0.9,
+        parallaxScrollingOffset: 50,
       }}
       snapEnabled={true}
       style={{
@@ -51,17 +51,18 @@ const RecipeItems = observer(({ selectRecipe }: RecipeItemsProps) => {
         <View flex={1} position="relative">
           <LinearGradient
             position="absolute"
-            rounded={"$3xl"}
             top={0}
             left={0}
             right={0}
             bottom={0}
+            borderBottomLeftRadius={"$3xl"}
+            borderBottomRightRadius={"$3xl"}
             zIndex={100}
             width="100%"
-            colors={["$transparent", "$black"]}
+            colors={["transparent", "black"]}
+            start={0}
+            end={1}
             borderRadius="$md"
-            start={[1, 0]}
-            end={[1, 1]}
             as={ExpoLinearGradient}
           ></LinearGradient>
           <VStack

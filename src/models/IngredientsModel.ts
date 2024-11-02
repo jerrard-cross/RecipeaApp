@@ -1,15 +1,18 @@
 import { BaseModel } from "./BaseModel";
 
-export class IngredientsModel extends BaseModel {
-  ingredient: Ingredient;
+export class IngredientsModel {
+  id: string;
   amount: string;
-  measurement_type: MeasurementType;
+  unit: string;
+  name: string;
+  notes?: string;
 
   constructor(results: any = {}) {
-    super();
-    this.ingredient = results.Ingredient;
-    this.amount = results.Amount;
-    this.measurement_type = results.measurement_type;
+    this.id = results.id;
+    this.amount = results.amount;
+    this.unit = results.unit;
+    this.name = results.name;
+    this.notes = results.notes;
   }
 }
 

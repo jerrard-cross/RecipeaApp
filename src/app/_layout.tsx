@@ -13,6 +13,7 @@ import ModalProvider from "../providers/ModalProvider";
 import LoadingProvider from "../providers/LoadingProvider";
 import { SessionProvider } from "../providers/SessionProvider";
 import { FontAwesome } from "@expo/vector-icons";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 
 export {
@@ -44,24 +45,26 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <GluestackUIProvider config={config}>
-        <ModalProvider>
-          <ToastProvider>
-            <LoadingProvider>
-              <UIProvider>
-                <SessionProvider>
-                  <Stack screenOptions={{ headerShown: false }}>
-                    <Stack.Screen
-                      name="(auth)/sign-in"
-                      options={{ headerShown: false }}
-                    />
-                  </Stack>
-                </SessionProvider>
-              </UIProvider>
-            </LoadingProvider>
-          </ToastProvider>
-        </ModalProvider>
-      </GluestackUIProvider>
+      <GestureHandlerRootView>
+        <GluestackUIProvider config={config}>
+          <ModalProvider>
+            <ToastProvider>
+              <LoadingProvider>
+                <UIProvider>
+                  <SessionProvider>
+                    <Stack screenOptions={{ headerShown: false }}>
+                      <Stack.Screen
+                        name="(auth)/sign-in"
+                        options={{ headerShown: false }}
+                      />
+                    </Stack>
+                  </SessionProvider>
+                </UIProvider>
+              </LoadingProvider>
+            </ToastProvider>
+          </ModalProvider>
+        </GluestackUIProvider>
+      </GestureHandlerRootView>
     </SafeAreaProvider>
   );
 }

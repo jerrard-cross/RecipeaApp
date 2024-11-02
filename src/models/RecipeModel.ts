@@ -7,7 +7,6 @@ export class RecipeModel extends BaseModel {
   instructions: string[];
   prepTimeMinutes: number;
   cookTimeMinutes: number;
-  mealType: string[];
   image: string;
   rating: number;
   servings: number;
@@ -23,7 +22,6 @@ export class RecipeModel extends BaseModel {
     this.instructions = results.instructions;
     this.prepTimeMinutes = results.prepTimeMinutes;
     this.cookTimeMinutes = results.cookTimeMinutes;
-    this.mealType = results.mealType;
     this.image = results.image;
     this.rating = results.rating;
     this.servings = results.servings;

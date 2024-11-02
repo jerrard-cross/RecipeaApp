@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Button,
+  ButtonIcon,
   ButtonText,
   Center,
   HStack,
@@ -16,9 +17,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import BaseModal from "./Modals/BaseModal";
 import SubSectionTitle from "./SubSectionTitle";
 import { RecipeModel } from "../models/RecipeModel";
-import RecipeForm from "./RecipeForm";
 import { create } from "react-test-renderer";
 import { useRecipeStore } from "../stores";
+import { RecipeForm } from "./RecipeForm";
+import { FormProvider } from "../providers/FormProvider";
+import { X } from "lucide-react-native";
 const AddRecipeButton = () => {
   const { createRecipe } = useRecipeStore();
   const [showActionsheet, setShowActionsheet] = useState(false);
@@ -34,20 +37,24 @@ const AddRecipeButton = () => {
       >
         <ButtonText>Add New Recipe</ButtonText>
       </Button>
-      <KeyboardAwareScrollView bounces={true} enableOnAndroid={true}>
-        <BaseModal isOpen={showActionsheet} onClose={handleClose} size={"full"}>
+      <BaseModal isOpen={showActionsheet} onClose={handleClose} size={"full"}>
+        <HStack justifyContent="space-between" alignItems="center">
           <SubSectionTitle title="Add Recipe" hasButton={false} />
-          <VStack w={"$full"} gap={"$2"}>
-            <RecipeForm
-              onSubmit={(values) => {
-                createRecipe(values);
-                handleClose();
-              }}
-              onClose={handleClose}
-            />
-          </VStack>
-        </BaseModal>
-      </KeyboardAwareScrollView>
+          <Button onPress={handleClose} rounded={"$full"} variant="link">
+            <ButtonIcon as={X} color={palette.primary} size={"xl"} />
+          </Button>
+        </HStack>
+        <VStack w={"$full"} gap={"$2"}>
+          <FormProvider
+            onSubmit={(values) => {
+              createRecipe(values);
+              handleClose();
+            }}
+          >
+            <RecipeForm />
+          </FormProvider>
+        </VStack>
+      </BaseModal>
     </>
   );
 };

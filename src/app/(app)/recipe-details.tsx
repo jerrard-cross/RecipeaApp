@@ -143,7 +143,7 @@ const RecipeDetailsScreen = observer(() => {
               <AccordionContentText>
                 {selectedRecipe?.ingredients.map((ingredient, index) => (
                   <HStack key={index} mb={"$2"}>
-                    <Text>{ingredient}</Text>
+                    <Text>{ingredient.toString()}</Text>
                   </HStack>
                 ))}
               </AccordionContentText>

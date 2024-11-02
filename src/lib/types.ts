@@ -1,31 +1,22 @@
-export interface Ingredient {
-  id: string;
-  name: string;
-  type: string;
-}
+export type FormStep =
+  | "basic"
+  | "time"
+  | "ingredients"
+  | "instructions"
+  | "additional";
 
-export interface SelectedIngredient extends Ingredient {
-  amount: string;
-  unit: string;
-}
-
-export interface NewIngredient {
-  name: string;
-  type: string;
-}
-
-// constants.ts
-export const UNITS = [
-  "grams",
-  "kg",
-  "ml",
-  "liters",
-  "cups",
-  "tablespoons",
-  "teaspoons",
-  "pieces",
-  "whole",
-  "to taste",
-] as const;
-
-export type Unit = (typeof UNITS)[number];
+// src/constants/recipe.ts
+export const MEAL_TYPES = ["Breakfast", "Lunch", "Dinner", "Snack", "Dessert"];
+export const DIFFICULTY_LEVELS = ["Easy", "Medium", "Hard"];
+export const CUISINES = [
+  "Italian",
+  "Chinese",
+  "Indian",
+  "Mexican",
+  "Japanese",
+  "Thai",
+  "French",
+  "Mediterranean",
+  "American",
+  "Other",
+];

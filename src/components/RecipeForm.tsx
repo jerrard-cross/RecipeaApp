@@ -1,529 +1,222 @@
-import React, { useState } from "react";
-import { ScrollView, Platform } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+import React from "react";
 import {
+  VStack,
   Box,
   Button,
   ButtonText,
-  FormControl,
-  FormControlLabel,
-  FormControlLabelText,
-  FormControlHelper,
-  FormControlHelperText,
-  Input,
-  InputField,
-  VStack,
-  Textarea,
-  TextareaInput,
-  Select,
-  SelectTrigger,
-  SelectInput,
-  SelectPortal,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectItem,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  Image,
+  Progress,
+  ProgressFilledTrack,
   HStack,
   Text,
-  AlertDialog,
-  AlertDialogBackdrop,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter,
-  Heading,
+  ScrollView,
+  View,
 } from "@gluestack-ui/themed";
-import palette from "../constants/palette";
+
+import {
+  FormProvider,
+  useFormContext,
+  useFormNavigation,
+} from "../providers/FormProvider";
+import { Alert } from "@gluestack-ui/themed";
 import { RecipeModel } from "../models/RecipeModel";
+import { FormStep } from "../lib/types";
+import { BasicInfoStep } from "./Steps/BasicInfoStep";
+import { TimeServingsStep } from "./Steps/TimeServingsStep";
+import { IngredientsStep } from "./Steps/IngredientsStep";
+import { InstructionsStep } from "./Steps/InstructionsStep";
+import palette from "../constants/palette";
 
-interface RecipeFormProps {
-  onSubmit: (data: RecipeModel) => void;
-  onClose: () => void;
-  initialData?: Partial<RecipeModel>;
-}
-
-const difficultyLevels = ["Easy", "Medium", "Hard"];
-const mealTypes = ["Breakfast", "Lunch", "Dinner", "Snack", "Dessert"];
-const commonCuisines = [
-  "Italian",
-  "Chinese",
-  "Indian",
-  "Mexican",
-  "Japanese",
-  "Thai",
-  "French",
-  "Mediterranean",
-  "American",
-  "Other",
+const STEPS: { id: FormStep; title: string }[] = [
+  { id: "basic", title: "Basic Info" },
+  { id: "time", title: "Time & Servings" },
+  { id: "ingredients", title: "Ingredients" },
+  { id: "instructions", title: "Instructions" },
 ];
 
-const RecipeForm: React.FC<RecipeFormProps> = ({
-  onSubmit,
-  onClose,
-  initialData = {},
+interface StepIndicatorProps {
+  currentStep: FormStep;
+  isStepValid: (step: FormStep) => boolean;
+}
+
+const StepIndicator: React.FC<StepIndicatorProps> = ({
+  currentStep,
+  isStepValid,
 }) => {
-  const [formData, setFormData] = useState<RecipeModel>({
-    name: "",
-    ingredients: [],
-    instructions: [],
-    prepTimeMinutes: 15,
-    cookTimeMinutes: 30,
-    servings: 4,
-    image: "",
-    difficulty: "Medium",
-    cuisine: "",
-    tags: [],
-    mealType: [],
-    rating: 0,
-    ...initialData,
-  });
-
-  const [newIngredient, setNewIngredient] = useState("");
-  const [newTag, setNewTag] = useState("");
-  const [showImagePicker, setShowImagePicker] = useState(false);
-
-  // Image picker functions
-  const pickImage = async (useCamera: boolean) => {
-    let result;
-
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      alert("Sorry, we need camera roll permissions to make this work!");
-      return;
-    }
-
-    if (useCamera) {
-      const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
-      if (cameraStatus.status !== "granted") {
-        alert("Sorry, we need camera permissions to make this work!");
-        return;
-      }
-      result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-    } else {
-      result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-    }
-
-    if (!result.canceled) {
-      setFormData({ ...formData, image: result.assets[0].uri });
-    }
-    setShowImagePicker(false);
-  };
-
-  // Form handling functions
-  const handleAddIngredient = () => {
-    if (newIngredient.trim()) {
-      setFormData({
-        ...formData,
-        ingredients: [...formData.ingredients, newIngredient.trim()],
-      });
-      setNewIngredient("");
-    }
-  };
-
-  const handleRemoveIngredient = (index: number) => {
-    setFormData({
-      ...formData,
-      ingredients: formData.ingredients.filter((_, i) => i !== index),
-    });
-  };
-
-  const handleAddTag = () => {
-    if (newTag.trim() && !formData.tags.includes(newTag.trim())) {
-      setFormData({
-        ...formData,
-        tags: [...formData.tags, newTag.trim()],
-      });
-      setNewTag("");
-    }
-  };
-
-  const handleRemoveTag = (tag: string) => {
-    setFormData({
-      ...formData,
-      tags: formData.tags.filter((t) => t !== tag),
-    });
-  };
-
-  const handleSubmit = () => {
-    onSubmit(formData);
-  };
-
-  const handleClose = () => {
-    onClose();
-  };
+  const currentStepIndex = STEPS.findIndex((step) => step.id === currentStep);
+  const progress = ((currentStepIndex + 1) / STEPS.length) * 100;
 
   return (
-    <ScrollView>
-      <VStack space="md" p="$4">
-        {/* Recipe Name */}
-        <FormControl isRequired>
-          <FormControlLabel>
-            <FormControlLabelText>Recipe Name</FormControlLabelText>
-          </FormControlLabel>
-          <Input>
-            <InputField
-              value={formData.name}
-              onChangeText={(text) => setFormData({ ...formData, name: text })}
-              placeholder="Enter recipe name"
-            />
-          </Input>
-        </FormControl>
-
-        {/* Ingredients */}
-        <FormControl isRequired>
-          <FormControlLabel>
-            <FormControlLabelText>Ingredients</FormControlLabelText>
-          </FormControlLabel>
-          <VStack space="sm">
-            {formData.ingredients.map((ingredient, index) => (
-              <HStack key={index} space="sm" alignItems="center">
-                <Text flex={1}>{ingredient}</Text>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  borderColor={palette.primary}
-                  rounded={"$full"}
-                  onPress={() => handleRemoveIngredient(index)}
-                >
-                  <ButtonText color={palette.primary} rounded={"$full"}>
-                    Remove
-                  </ButtonText>
-                </Button>
-              </HStack>
-            ))}
-            <HStack space="sm">
-              <Input flex={1}>
-                <InputField
-                  value={newIngredient}
-                  onChangeText={setNewIngredient}
-                  placeholder="Add ingredient"
-                />
-              </Input>
-              <Button
-                bgColor={palette.primary}
-                rounded={"$full"}
-                onPress={handleAddIngredient}
-              >
-                <ButtonText>Add</ButtonText>
-              </Button>
-            </HStack>
-          </VStack>
-        </FormControl>
-
-        {/* Instructions */}
-        <FormControl isRequired>
-          <FormControlLabel>
-            <FormControlLabelText>Instructions</FormControlLabelText>
-          </FormControlLabel>
-          <Textarea>
-            <TextareaInput
-              value={formData.instructions}
-              onChangeText={(text) =>
-                setFormData({ ...formData, instructions: text })
-              }
-              placeholder="Enter cooking instructions"
-              numberOfLines={4}
-            />
-          </Textarea>
-        </FormControl>
-
-        {/* Time and Servings */}
-        <HStack space="md">
-          <FormControl flex={1}>
-            <FormControlLabel>
-              <FormControlLabelText>Prep Time (min)</FormControlLabelText>
-            </FormControlLabel>
-            <Input>
-              <InputField
-                value={formData.prepTimeMinutes.toString()}
-                onChangeText={(text) =>
-                  setFormData({
-                    ...formData,
-                    prepTimeMinutes: parseInt(text) || 0,
-                  })
-                }
-                keyboardType="numeric"
-              />
-            </Input>
-          </FormControl>
-
-          <FormControl flex={1}>
-            <FormControlLabel>
-              <FormControlLabelText>Cook Time (min)</FormControlLabelText>
-            </FormControlLabel>
-            <Input>
-              <InputField
-                value={formData.cookTimeMinutes.toString()}
-                onChangeText={(text) =>
-                  setFormData({
-                    ...formData,
-                    cookTimeMinutes: parseInt(text) || 0,
-                  })
-                }
-                keyboardType="numeric"
-              />
-            </Input>
-          </FormControl>
-
-          <FormControl flex={1}>
-            <FormControlLabel>
-              <FormControlLabelText>Servings</FormControlLabelText>
-            </FormControlLabel>
-            <Input>
-              <InputField
-                value={formData.servings.toString()}
-                onChangeText={(text) =>
-                  setFormData({ ...formData, servings: parseInt(text) || 0 })
-                }
-                keyboardType="numeric"
-              />
-            </Input>
-          </FormControl>
-        </HStack>
-
-        {/* Image Picker */}
-        <FormControl>
-          <FormControlLabel>
-            <FormControlLabelText>Recipe Image</FormControlLabelText>
-          </FormControlLabel>
-          <VStack space="sm">
-            {formData.image && (
-              <Image
-                source={{ uri: formData.image }}
-                alt="Recipe"
-                size="2xl"
-                rounded="$md"
-              />
-            )}
-            <Button
-              bgColor={palette.primary}
-              rounded={"$full"}
-              onPress={() => setShowImagePicker(true)}
+    <VStack space="sm" p="$4">
+      <Progress value={progress} w="100%" h="$2">
+        <ProgressFilledTrack bgColor={palette.primary} />
+      </Progress>
+      <HStack justifyContent="space-between" flexWrap="wrap">
+        {STEPS.map((step, index) => (
+          <Box key={step.id} opacity={currentStep === step.id ? 1 : 0.6}>
+            <Text
+              fontSize="$xs"
+              fontWeight={currentStep === step.id ? "$bold" : "$normal"}
+              color={isStepValid(step.id) ? palette.primary : "$textDark500"}
             >
-              <ButtonText>
-                {formData.image ? "Change Image" : "Add Image"}
-              </ButtonText>
-            </Button>
-          </VStack>
-        </FormControl>
-
-        {/* Difficulty */}
-        <FormControl>
-          <FormControlLabel>
-            <FormControlLabelText>Difficulty</FormControlLabelText>
-          </FormControlLabel>
-          <Select
-            selectedValue={formData.difficulty}
-            onValueChange={(value) =>
-              setFormData({
-                ...formData,
-                difficulty: value as RecipeFormData["difficulty"],
-              })
-            }
-          >
-            <SelectTrigger>
-              <SelectInput placeholder="Select difficulty" />
-            </SelectTrigger>
-            <SelectPortal>
-              <SelectBackdrop />
-              <SelectContent>
-                <SelectDragIndicator />
-                {difficultyLevels.map((level) => (
-                  <SelectItem key={level} label={level} value={level} />
-                ))}
-              </SelectContent>
-            </SelectPortal>
-          </Select>
-        </FormControl>
-
-        {/* Cuisine */}
-        <FormControl>
-          <FormControlLabel>
-            <FormControlLabelText>Cuisine</FormControlLabelText>
-          </FormControlLabel>
-          <Select
-            selectedValue={formData.cuisine}
-            onValueChange={(value) =>
-              setFormData({ ...formData, cuisine: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectInput placeholder="Select cuisine" />
-            </SelectTrigger>
-            <SelectPortal>
-              <SelectBackdrop />
-              <SelectContent>
-                <SelectDragIndicator />
-                {commonCuisines.map((cuisine) => (
-                  <SelectItem key={cuisine} label={cuisine} value={cuisine} />
-                ))}
-              </SelectContent>
-            </SelectPortal>
-          </Select>
-        </FormControl>
-
-        {/* Tags */}
-        <FormControl>
-          <FormControlLabel>
-            <FormControlLabelText>Tags</FormControlLabelText>
-          </FormControlLabel>
-          <VStack space="sm">
-            {formData.tags.map((tag) => (
-              <Button
-                bgColor={palette.primary}
-                rounded={"$full"}
-                key={tag}
-                onPress={() => handleRemoveTag(tag)}
-                variant="outline"
-              >
-                <ButtonText>{tag}</ButtonText>
-              </Button>
-            ))}
-            <HStack space="sm">
-              <Input flex={1}>
-                <InputField
-                  value={newTag}
-                  onChangeText={setNewTag}
-                  placeholder="Add tag"
-                />
-              </Input>
-              <Button
-                bgColor={palette.primary}
-                rounded={"$full"}
-                onPress={handleAddTag}
-              >
-                <ButtonText>Add Tag</ButtonText>
-              </Button>
-            </HStack>
-          </VStack>
-        </FormControl>
-
-        {/* Meal Type */}
-        <FormControl>
-          <FormControlLabel>
-            <FormControlLabelText>Meal Type</FormControlLabelText>
-          </FormControlLabel>
-          <Select
-            selectedValue={formData.mealType}
-            onValueChange={(value) =>
-              setFormData({ ...formData, mealType: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectInput placeholder="Select meal type" />
-            </SelectTrigger>
-            <SelectPortal>
-              <SelectBackdrop />
-              <SelectContent>
-                <SelectDragIndicator />
-                {mealTypes.map((type) => (
-                  <SelectItem key={type} label={type} value={type} />
-                ))}
-              </SelectContent>
-            </SelectPortal>
-          </Select>
-        </FormControl>
-
-        {/* Rating */}
-        <FormControl>
-          <FormControlLabel>
-            <FormControlLabelText>Rating</FormControlLabelText>
-          </FormControlLabel>
-          <Box px="$4">
-            <Slider
-              value={formData.rating}
-              onChange={(value) => setFormData({ ...formData, rating: value })}
-              minValue={0}
-              maxValue={5}
-              step={0.5}
-            >
-              <SliderTrack>
-                <SliderFilledTrack />
-              </SliderTrack>
-              <SliderThumb bgColor={palette.primary} />
-            </Slider>
+              {step.title}
+            </Text>
           </Box>
-          <FormControlHelper>
-            <FormControlHelperText>
-              Rating: {formData.rating} / 5
-            </FormControlHelperText>
-          </FormControlHelper>
-        </FormControl>
-
-        {/* Submit Button */}
-        <Button
-          bgColor={palette.primary}
-          rounded={"$full"}
-          size="lg"
-          onPress={handleSubmit}
-        >
-          <ButtonText>Save Recipe</ButtonText>
-        </Button>
-        <Button
-          bgColor={palette.primary}
-          rounded={"$full"}
-          size="lg"
-          onPress={handleClose}
-        >
-          <ButtonText>Cancel</ButtonText>
-        </Button>
-      </VStack>
-
-      <AlertDialog
-        isOpen={showImagePicker}
-        onClose={() => setShowImagePicker(false)}
-      >
-        <AlertDialogBackdrop />
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <Heading>Select Image</Heading>
-          </AlertDialogHeader>
-          <AlertDialogBody>
-            <VStack space="md">
-              <Button
-                bgColor={palette.primary}
-                rounded={"$full"}
-                onPress={() => pickImage(true)}
-              >
-                <ButtonText>Take Photo</ButtonText>
-              </Button>
-              <Button
-                bgColor={palette.primary}
-                rounded={"$full"}
-                onPress={() => pickImage(false)}
-              >
-                <ButtonText>Choose from Library</ButtonText>
-              </Button>
-              <Button
-                bgColor={palette.primary}
-                rounded={"$full"}
-                variant="outline"
-                onPress={() => setShowImagePicker(false)}
-              >
-                <ButtonText>Cancel</ButtonText>
-              </Button>
-            </VStack>
-          </AlertDialogBody>
-          <AlertDialogFooter />
-        </AlertDialogContent>
-      </AlertDialog>
-    </ScrollView>
+        ))}
+      </HStack>
+    </VStack>
   );
 };
 
-export default RecipeForm;
+interface StepNavigationProps {
+  canProgress: boolean;
+  onNext: () => void;
+  onPrevious: () => void;
+  onSubmit: () => void;
+  isFirstStep: boolean;
+  isLastStep: boolean;
+}
+
+const StepNavigation: React.FC<StepNavigationProps> = ({
+  canProgress,
+  onNext,
+  onPrevious,
+  onSubmit,
+  isFirstStep,
+  isLastStep,
+}) => (
+  <HStack
+    space="md"
+    p="$4"
+    borderTopWidth={1}
+    borderTopColor="$borderLight200"
+    bg="$white"
+    justifyContent="space-between"
+  >
+    {!isFirstStep && (
+      <Button
+        borderColor={palette.primary}
+        variant="outline"
+        onPress={onPrevious}
+        flex={1}
+      >
+        <ButtonText color={palette.primary}>Previous</ButtonText>
+      </Button>
+    )}
+
+    <Button
+      onPress={isLastStep ? onSubmit : onNext}
+      bgColor={isLastStep ? palette.primary : "$transparent"}
+      borderColor={isLastStep ? "$transparent" : palette.primary}
+      flex={1}
+      disabled={!canProgress}
+      variant={isLastStep ? "solid" : "outline"}
+    >
+      <ButtonText color={isLastStep ? "$white" : palette.primary}>
+        {isLastStep ? "Submit Recipe" : "Next"}
+      </ButtonText>
+    </Button>
+  </HStack>
+);
+
+export const RecipeForm: React.FC = () => {
+  const { currentStep, isStepValid } = useFormContext();
+  const {
+    nextStep,
+    previousStep,
+    isFirstStep,
+    isLastStep,
+    submitForm,
+    canProgress,
+  } = useFormNavigation();
+
+  const renderStep = () => {
+    switch (currentStep) {
+      case "basic":
+        return <BasicInfoStep />;
+      case "time":
+        return <TimeServingsStep />;
+      case "ingredients":
+        return <IngredientsStep />;
+      case "instructions":
+        return <InstructionsStep />;
+      // case "additional":
+      //   return <AdditionalInfoStep />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <Box flex={1} bg="$white">
+      <StepIndicator currentStep={currentStep} isStepValid={isStepValid} />
+
+      <View flex={1}>{renderStep()}</View>
+
+      <StepNavigation
+        canProgress={canProgress}
+        onNext={nextStep}
+        onPrevious={previousStep}
+        onSubmit={submitForm}
+        isFirstStep={isFirstStep}
+        isLastStep={isLastStep}
+      />
+    </Box>
+  );
+};
+
+// App.tsx or parent component
+export const RecipeFormScreen: React.FC = () => {
+  // const use;
+  const handleSubmit = async (formData: RecipeModel) => {
+    try {
+      // Handle form submission
+      console.log("Form submitted:", formData);
+
+      // Example: Submit to API
+      // await submitRecipe(formData);
+
+      // Show success message
+      // Alert.alert("Success", "Recipe saved successfully!");
+    } catch (error) {
+      // Handle error
+      // Alert.alert("Error", "Failed to save recipe. Please try again.");
+    }
+  };
+
+  return (
+    <FormProvider onSubmit={handleSubmit}>
+      <RecipeForm />
+    </FormProvider>
+  );
+};
+
+// Style constants for reuse across components
+export const formStyles = {
+  sectionContainer: {
+    p: "$4",
+    space: "md",
+  },
+  inputContainer: {
+    mb: "$4",
+  },
+  label: {
+    mb: "$2",
+    fontSize: "$sm",
+    fontWeight: "$medium",
+  },
+  helperText: {
+    mt: "$1",
+    fontSize: "$xs",
+    color: "$textDark400",
+  },
+  errorText: {
+    color: "$error500",
+    fontSize: "$xs",
+    mt: "$1",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    mt: "$4",
+  },
+};

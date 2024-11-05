@@ -1,33 +1,22 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  ButtonText,
-  Image,
-  Input,
-  InputField,
-  Text,
-  View,
-} from "@gluestack-ui/themed";
+import React, { useEffect } from "react";
+import { Image, View } from "@gluestack-ui/themed";
 import { router } from "expo-router";
 import Auth from "@/src/components/Auth";
-import { supabase } from "@/src/lib/supabase";
-import { Session } from "@supabase/supabase-js";
-import { useAuthStore } from "@/src/stores";
+
 import { observer } from "mobx-react-lite";
 import { useSession } from "@/src/providers/SessionProvider";
 
 const AuthScreen = observer(() => {
-  const { session, refreshUser } = useSession();
+  const { user } = useSession();
 
   useEffect(() => {
-    if (session) {
+    if (user) {
       router.navigate("/(app)");
     }
-    if (!session) {
+    if (!user) {
       router.navigate("/sign-in");
     }
-  }, [session]);
+  }, [user]);
   return (
     <View h="$full" alignItems="center" gap={"$2"} mt={"$10"}>
       <Image

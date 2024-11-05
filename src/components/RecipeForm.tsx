@@ -170,11 +170,8 @@ export const RecipeFormScreen: React.FC = () => {
   const handleSubmit = async (formData: RecipeModel) => {
     try {
       // Handle form submission
-      console.log("Form submitted:", formData);
-
       // Example: Submit to API
       // await submitRecipe(formData);
-
       // Show success message
       // Alert.alert("Success", "Recipe saved successfully!");
     } catch (error) {

@@ -8,11 +8,10 @@ import {
   VStack,
 } from "@gluestack-ui/themed";
 import React, { useEffect } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
 import { useRecipeStore } from "../stores";
-import { LinearGradient } from "@gluestack-ui/themed";
-import { LinearGradient as ExpoLinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import { Text } from "@gluestack-ui/themed";
 import Animated from "react-native-reanimated";
 import palette from "../constants/palette";
@@ -50,20 +49,8 @@ const RecipeItems = observer(({ selectRecipe }: RecipeItemsProps) => {
       renderItem={({ item }) => (
         <View flex={1} position="relative">
           <LinearGradient
-            position="absolute"
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
-            borderBottomLeftRadius={"$3xl"}
-            borderBottomRightRadius={"$3xl"}
-            zIndex={100}
-            width="100%"
+            style={styles.gradientContainer}
             colors={["transparent", "black"]}
-            start={0}
-            end={1}
-            borderRadius="$md"
-            as={ExpoLinearGradient}
           ></LinearGradient>
           <VStack
             position="absolute"
@@ -120,6 +107,19 @@ const RecipeItems = observer(({ selectRecipe }: RecipeItemsProps) => {
       )}
     />
   );
+});
+
+const styles = StyleSheet.create({
+  gradientContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 30,
+    zIndex: 100,
+    width: "100%",
+  },
 });
 
 export default RecipeItems;

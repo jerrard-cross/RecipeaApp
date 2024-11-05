@@ -18,6 +18,6 @@ export class UserModel {
     this.gender = results.gender;
     this.image = results.image;
     this.accessToken = results.accessToken;
-    this.refreshToken = results.refresh;
+    this.refreshToken = results.refreshToken;
   }
 }

@@ -7,9 +7,9 @@ import { Feather, FontAwesome6, Ionicons, Octicons } from "@expo/vector-icons";
 import { useSession } from "@/src/providers/SessionProvider";
 
 const AppLayout = observer(() => {
-  const { session, refreshUser } = useSession();
+  const { user } = useSession();
 
-  if (!session) {
+  if (!user) {
     return <Redirect href="/(auth)/sign-in" />;
   }
 

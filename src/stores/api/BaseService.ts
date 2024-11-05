@@ -17,6 +17,7 @@ export const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 export function mapResponseToDataInstance<T>(classType: ClassConstructor<T>) {

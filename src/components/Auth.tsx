@@ -14,18 +14,11 @@ import {
   ButtonText,
 } from "@gluestack-ui/themed";
 import React, { useState } from "react";
-import { useAuthStore, useUIStore } from "../stores";
-import { observe } from "mobx";
 import { observer } from "mobx-react-lite";
 import { router } from "expo-router";
 import palette from "../constants/palette";
 import { useSession } from "../providers/SessionProvider";
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { Keyboard, TouchableWithoutFeedback } from "react-native";
 
 const Auth = observer(() => {
   const [username, setUsername] = useState("");
@@ -92,7 +85,7 @@ const Auth = observer(() => {
           <Button
             variant="link"
             onPress={() => {
-              router.navigate("/signup");
+              router.navigate("/(auth)/sign-up");
             }}
           >
             <ButtonText color={palette.primary}>Create an account</ButtonText>

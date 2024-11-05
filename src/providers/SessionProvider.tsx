@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useStorageState } from "../hooks/useStorageState";
 import { AuthService } from "../stores/api/AuthService";
 import { UserModel } from "../models/UserModel";
@@ -7,17 +7,19 @@ import { useUIStore } from "../stores";
 const AuthContext = React.createContext<{
   signIn: (username: string, password: string) => void;
   signOut: () => void;
-  refreshUser: (refreshToken: string) => void;
-  session?: string | null;
+  refreshToken?: string | null;
+  accessToken?: string | null;
   user?: UserModel | null;
-  isLoading: boolean;
+  isRefreshLoading: boolean;
+  isAccessLoading: boolean;
 }>({
   signIn: () => null,
   signOut: () => null,
-  refreshUser: () => null,
-  session: null,
+  refreshToken: null,
+  accessToken: null,
   user: null,
-  isLoading: false,
+  isRefreshLoading: false,
+  isAccessLoading: false,
 });
 
 const api = new AuthService();
@@ -34,9 +36,49 @@ export function useSession() {
 }
 
 export function SessionProvider(props: React.PropsWithChildren) {
-  const [[isLoading, session], setSession] = useStorageState("session");
+  const [[isRefreshLoading, refreshToken], setRefreshToken] =
+    useStorageState("refreshToken");
+  const [[isAccessLoading, accessToken], setAccessToken] =
+    useStorageState("accessToken");
+
   const [user, setUser] = React.useState<UserModel | null>(null);
   const { showToast } = useUIStore();
+
+  const getUser = async (accessToken: string) => {
+    try {
+      let user = await api.getUser(accessToken);
+
+      setUser(user);
+    } catch (error) {
+      showToast({
+        title: "Error getting user",
+        status: "error",
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (refreshToken) {
+      api
+        .refreshUser(refreshToken)
+        .then((response) => {
+          if (response) {
+            setRefreshToken(response.refreshToken);
+            setAccessToken(response.accessToken);
+            getUser(response.accessToken);
+          }
+        })
+        .catch((error) => {
+          showToast({
+            title: "Error refreshing user",
+            status: "error",
+          });
+          setRefreshToken(null);
+          setAccessToken(null);
+          setUser(null);
+        });
+    }
+  }, [refreshToken]);
 
   return (
     <AuthContext.Provider
@@ -46,7 +88,8 @@ export function SessionProvider(props: React.PropsWithChildren) {
             let response = await api.loginUser(username, password);
 
             if (response) {
-              setSession(response.accessToken);
+              setRefreshToken(response.refreshToken);
+              setAccessToken(response.accessToken);
               setUser(response);
             }
           } catch (error) {
@@ -56,30 +99,14 @@ export function SessionProvider(props: React.PropsWithChildren) {
             });
           }
         },
-        refreshUser: async (refreshToken: string) => {
-          try {
-            let response = await api.refreshUser(refreshToken);
-
-            if (response) {
-              console.log(response);
-              setSession(response.accessToken);
-              setUser(response);
-            }
-          } catch (error) {
-            showToast({
-              title: "Error refreshing user",
-              status: "error",
-            });
-            setSession(null);
-            setUser(null);
-          }
-        },
         signOut: () => {
-          setSession(null);
+          setRefreshToken(null);
         },
-        session,
+        refreshToken,
+        accessToken,
         user: user,
-        isLoading,
+        isRefreshLoading,
+        isAccessLoading,
       }}
     >
       {props.children}

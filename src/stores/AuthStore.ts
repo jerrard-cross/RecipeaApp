@@ -2,7 +2,6 @@ import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { UserModel } from "../models/UserModel";
 import { RootStore } from "./RootStore";
 import { supabase } from "../lib/supabase";
-import { AuthService } from "./api/AuthService";
 import { apiClient, getURL } from "./api/BaseService";
 
 export const authStoreReaction = (auth: AuthStore) => {

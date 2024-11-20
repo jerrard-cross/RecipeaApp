@@ -1,5 +1,4 @@
 import { BaseModel } from "./BaseModel";
-import { IngredientsModel } from "./IngredientsModel";
 
 export class RecipeModel extends BaseModel {
   name: string;

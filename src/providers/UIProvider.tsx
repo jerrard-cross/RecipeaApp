@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { useUIStore } from "../stores";
 import { useModalContext } from "./ModalProvider";

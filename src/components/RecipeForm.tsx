@@ -8,7 +8,6 @@ import {
   ProgressFilledTrack,
   HStack,
   Text,
-  ScrollView,
   View,
 } from "@gluestack-ui/themed";
 
@@ -17,26 +16,22 @@ import {
   useFormContext,
   useFormNavigation,
 } from "../providers/FormProvider";
-import { Alert } from "@gluestack-ui/themed";
 import { RecipeModel } from "../models/RecipeModel";
-import { FormStep } from "../lib/types";
+import { FormStep, STEPS } from "../lib/types";
 import { BasicInfoStep } from "./Steps/BasicInfoStep";
 import { TimeServingsStep } from "./Steps/TimeServingsStep";
 import { IngredientsStep } from "./Steps/IngredientsStep";
 import { InstructionsStep } from "./Steps/InstructionsStep";
 import palette from "../constants/palette";
 
-const STEPS: { id: FormStep; title: string }[] = [
-  { id: "basic", title: "Basic Info" },
-  { id: "time", title: "Time & Servings" },
-  { id: "ingredients", title: "Ingredients" },
-  { id: "instructions", title: "Instructions" },
-];
-
 interface StepIndicatorProps {
   currentStep: FormStep;
   isStepValid: (step: FormStep) => boolean;
 }
+
+type RecipeFormProps = {
+  selectedRecipe?: RecipeModel;
+};
 
 const StepIndicator: React.FC<StepIndicatorProps> = ({
   currentStep,
@@ -118,8 +113,9 @@ const StepNavigation: React.FC<StepNavigationProps> = ({
   </HStack>
 );
 
-export const RecipeForm: React.FC = () => {
+export const RecipeForm = ({ selectedRecipe }: RecipeFormProps) => {
   const { currentStep, isStepValid } = useFormContext();
+
   const {
     nextStep,
     previousStep,

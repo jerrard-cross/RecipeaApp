@@ -176,14 +176,18 @@ export const InstructionsStep: React.FC = () => {
             </Text>
           </Box>
         ) : (
-          <GestureHandlerRootView style={{ flex: 1 }}>
+          <VStack space="md" flex={1}>
             <DraggableFlatList
               data={formData.instructions}
               onDragEnd={({ data }) => handleDragEnd(data)}
               keyExtractor={(item, index) => `instruction-${index}`}
               renderItem={renderInstructionItem}
+              windowSize={11}
+              initialNumToRender={6}
+              removeClippedSubviews={true}
+              scrollEnabled={true}
             />
-          </GestureHandlerRootView>
+          </VStack>
         )}
       </Box>
 

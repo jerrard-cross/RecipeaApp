@@ -13,6 +13,8 @@ import {
   Heading,
   Text,
   VStack,
+  PopoverBackdrop,
+  PopoverHeader,
 } from "@gluestack-ui/themed";
 
 import palette from "../constants/palette";
@@ -24,9 +26,11 @@ const AuthHeader = () => {
   const { signOut, user } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => {
+    console.log("open");
     setIsOpen(true);
   };
   const handleClose = () => {
+    console.log("close");
     setIsOpen(false);
   };
 
@@ -54,7 +58,6 @@ const AuthHeader = () => {
           isOpen={isOpen}
           onClose={handleClose}
           onOpen={handleOpen}
-          isKeyboardDismissable={true}
           placement="left"
           size="md"
           trigger={(triggerProps) => (
@@ -63,7 +66,11 @@ const AuthHeader = () => {
             </Button>
           )}
         >
-          <PopoverContent w={"$full"}>
+          <PopoverBackdrop />
+          <PopoverContent>
+            <PopoverHeader>
+              <Heading size="md">Settings</Heading>
+            </PopoverHeader>
             <PopoverBody>
               <Button
                 rounded={"$full"}

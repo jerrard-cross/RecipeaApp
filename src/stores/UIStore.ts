@@ -25,16 +25,6 @@ export interface ShowModalOptions extends BaseModalProps {
   size?: "xs" | "sm" | "md" | "lg";
 }
 
-type ShowConnectionModalOptions = {
-  size?: "xs" | "sm" | "md" | "lg";
-  primary?: string;
-  secondary?: string;
-  tertiary?: string;
-  onPrimary: () => void;
-  onSecondary?: () => void;
-  onTertiary?: () => void;
-};
-
 //////////////////////////////////////
 // UI-related changes
 //

@@ -46,11 +46,18 @@ export class RecipeStore {
     });
   }
 
+  async updateRecipe(recipe: RecipeModel) {
+    runInAction(() => {
+      const index = this.recipes.findIndex((r) => r.id === recipe.id);
+      this.recipes[index] = recipe;
+      this.selectedRecipe = recipe;
+    });
+  }
+
   async getIngredientList() {
     const response = await service.getIngredientList();
 
     if (response) {
-      console.log(response);
       runInAction(() => {
         this.ingredientList = response ?? [];
       });

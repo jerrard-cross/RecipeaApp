@@ -1,5 +1,5 @@
 import { config } from "@/src/constants/config";
-import axios, { AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { ClassConstructor, plainToInstance } from "class-transformer";
 
 export interface ResponseDataObject<T> {

@@ -53,6 +53,7 @@ export default function RootLayout() {
                 <UIProvider>
                   <SessionProvider>
                     <Stack screenOptions={{ headerShown: false }}>
+                      {}
                       <Stack.Screen
                         name="(auth)/sign-in"
                         options={{ headerShown: false }}

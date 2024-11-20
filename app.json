@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "RecipeaApp",
-    "slug": "RecipeaApp",
+    "slug": "recipea-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/icon.png",
@@ -19,7 +19,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "com.jcross2040.recipeaapp"
     },
     "web": {
       "bundler": "metro",
@@ -38,6 +40,12 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fd5b792f-aa13-4810-9be2-8b2092b8a368"
+      }
+    },
+    "owner": "jcross2040"
   }
 }

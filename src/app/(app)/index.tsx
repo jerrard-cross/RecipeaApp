@@ -8,8 +8,8 @@ import MyRecipes from "@/src/components/MyRecipes";
 import RecipeTags from "@/src/components/RecipeTags";
 import RecipeItems from "@/src/components/RecipeItems";
 import AuthHeader from "@/src/components/AuthHeader";
-import AddRecipeButton from "@/src/components/AddRecipeButton";
 import { SafeAreaView } from "@gluestack-ui/themed";
+import AddRecipe from "@/src/components/AddRecipe";
 
 const HomeScreen = observer(() => {
   const { getRecipes, selectRecipe, recipes } = useRecipeStore();
@@ -38,7 +38,7 @@ const HomeScreen = observer(() => {
 
         <RecipeItems selectRecipe={selectRecipe} />
         <VStack justifyContent="center" alignItems="center" w="$full">
-          <AddRecipeButton />
+          <AddRecipe />
         </VStack>
       </VStack>
     </SafeAreaView>

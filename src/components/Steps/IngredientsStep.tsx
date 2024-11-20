@@ -18,6 +18,7 @@ import {
   Text,
   Pressable,
   ButtonIcon,
+  View,
 } from "@gluestack-ui/themed";
 import { GripVertical, Plus, Trash2 } from "lucide-react-native";
 import DraggableFlatList, {
@@ -25,8 +26,8 @@ import DraggableFlatList, {
   RenderItemParams,
 } from "react-native-draggable-flatlist";
 import { useFormContext } from "@/src/providers/FormProvider";
-import { IngredientsModel } from "@/src/models/IngredientsModel";
 import palette from "@/src/constants/palette";
+import { LogBox } from "react-native";
 
 export const IngredientsStep: React.FC = () => {
   const { formData, updateFormData } = useFormContext();
@@ -71,6 +72,10 @@ export const IngredientsStep: React.FC = () => {
         setIndex(currentIndex);
       }
     }, [getIndex]);
+
+    useEffect(() => {
+      LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    }, []);
     return (
       <ScaleDecorator>
         <Pressable
@@ -131,6 +136,7 @@ export const IngredientsStep: React.FC = () => {
               returnKeyType="done"
             />
           </Input>
+
           <Button bgColor={palette.primary} onPress={handleAddIngredient}>
             <ButtonIcon as={Plus} />
             <ButtonText>Add</ButtonText>
@@ -164,14 +170,13 @@ export const IngredientsStep: React.FC = () => {
           </Text>
         </Box>
       ) : (
-        <Box flex={1}>
-          <DraggableFlatList
-            data={formData.ingredients}
-            onDragEnd={({ data }) => handleDragEnd(data)}
-            keyExtractor={(item, index) => `ingredient-${index}`}
-            renderItem={renderIngredientItem}
-          />
-        </Box>
+        <DraggableFlatList
+          data={formData.ingredients}
+          onDragEnd={({ data }) => handleDragEnd(data)}
+          keyExtractor={(item, index) => `ingredient-${index}`}
+          renderItem={renderIngredientItem}
+          scrollEnabled={true}
+        />
       )}
 
       {formData.ingredients.length > 0 && (

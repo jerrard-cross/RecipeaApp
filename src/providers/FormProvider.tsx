@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { FormStep } from "../lib/types";
 import { RecipeModel } from "../models/RecipeModel";
+import { useRecipeStore } from "../stores";
 
 interface FormContextType {
   formData: RecipeModel;
@@ -36,19 +37,21 @@ export const FormProvider: React.FC<FormProviderProps> = ({
   onSubmit,
   initialData = {},
 }) => {
+  const { selectedRecipe } = useRecipeStore();
+
   // Initialize form state with default values and any initial data
   const [formData, setFormData] = useState<RecipeModel>({
-    name: "",
-    image: "",
-    difficulty: "Medium",
-    cuisine: "",
-    prepTimeMinutes: 15,
-    cookTimeMinutes: 30,
-    servings: 4,
-    ingredients: [],
-    instructions: [],
-    tags: [],
-    rating: 0,
+    name: selectedRecipe?.name || "",
+    image: selectedRecipe?.image || "",
+    difficulty: selectedRecipe?.difficulty || "Medium",
+    cuisine: selectedRecipe?.cuisine || "American",
+    prepTimeMinutes: selectedRecipe?.prepTimeMinutes || 15,
+    cookTimeMinutes: selectedRecipe?.cookTimeMinutes || 30,
+    servings: selectedRecipe?.servings || 4,
+    ingredients: selectedRecipe?.ingredients || [],
+    instructions: selectedRecipe?.instructions || [],
+    tags: selectedRecipe?.tags || [],
+    rating: selectedRecipe?.rating || 0,
     ...initialData,
   });
 

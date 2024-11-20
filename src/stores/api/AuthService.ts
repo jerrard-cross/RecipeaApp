@@ -1,6 +1,5 @@
-import { supabase } from "@/src/lib/supabase";
 import { UserModel } from "@/src/models/UserModel";
-import { BaseService, mapResponseToInstance } from "./BaseService";
+import { BaseService } from "./BaseService";
 
 export class AuthService extends BaseService {
   async loginUser(

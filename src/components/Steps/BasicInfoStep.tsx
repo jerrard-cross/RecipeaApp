@@ -39,12 +39,19 @@ import { Platform } from "react-native";
 import { useFormContext } from "@/src/providers/FormProvider";
 import { CUISINES, DIFFICULTY_LEVELS, MEAL_TYPES } from "@/src/lib/types";
 import { Heading } from "@gluestack-ui/themed";
+import { RecipeModel } from "@/src/models/RecipeModel";
 
 interface ValidationErrors {
   name?: string;
 }
 
-export const BasicInfoStep: React.FC = () => {
+type BasicInfoStepProps = {
+  selectedRecipe?: RecipeModel;
+};
+
+export const BasicInfoStep: React.FC = ({
+  selectedRecipe,
+}: BasicInfoStepProps) => {
   const { formData, updateFormData } = useFormContext();
   const [showImagePicker, setShowImagePicker] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});

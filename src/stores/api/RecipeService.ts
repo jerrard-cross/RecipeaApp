@@ -26,7 +26,6 @@ export class RecipeService extends BaseService {
   }
 
   async createRecipe(recipe: RecipeModel) {
-    console.log("Creating recipe:", recipe);
     const { data, error } = await supabase
       .from("recipes")
       .insert([recipe])

@@ -50,6 +50,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
 
       setUser(user);
     } catch (error) {
+      console.log(error); // eslint-disable-line no-console
       showToast({
         title: "Error getting user",
         status: "error",
@@ -69,6 +70,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
           }
         })
         .catch((error) => {
+          console.log(error); // eslint-disable-line no-console
           showToast({
             title: "Error refreshing user",
             status: "error",
@@ -93,6 +95,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
               setUser(response);
             }
           } catch (error) {
+            console.log(error); // eslint-disable-line no-console
             showToast({
               title: "Error signing in",
               status: "error",

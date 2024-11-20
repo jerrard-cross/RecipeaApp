@@ -3,13 +3,13 @@ import { Stack } from "expo-router";
 import { VStack, StatusBar } from "@gluestack-ui/themed";
 import { useRecipeStore } from "@/src/stores";
 import { observer } from "mobx-react-lite";
-import MyRecipes from "@/src/components/MyRecipes";
+import MyRecipes from "@/src/components/Recipes/MyRecipes";
 
-import RecipeTags from "@/src/components/RecipeTags";
-import RecipeItems from "@/src/components/RecipeItems";
-import AuthHeader from "@/src/components/AuthHeader";
+import RecipeTags from "@/src/components/Recipes/RecipeTags";
+import RecipeItems from "@/src/components/Recipes/RecipeItems";
+import AuthHeader from "@/src/components/Auth/AuthHeader";
 import { SafeAreaView } from "@gluestack-ui/themed";
-import AddRecipe from "@/src/components/AddRecipe";
+import AddRecipe from "@/src/components/Recipes/AddRecipe";
 
 const HomeScreen = observer(() => {
   const { getRecipes, selectRecipe, recipes } = useRecipeStore();

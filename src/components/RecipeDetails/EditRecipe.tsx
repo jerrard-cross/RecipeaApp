@@ -3,19 +3,20 @@ import {
   Button,
   ButtonIcon,
   ButtonText,
+  Center,
   HStack,
   VStack,
 } from "@gluestack-ui/themed";
-import palette from "../constants/palette";
+import palette from "../../constants/palette";
 
-import BaseModal from "./Modals/BaseModal";
-import SubSectionTitle from "./SubSectionTitle";
-import { useRecipeStore } from "../stores";
-import { RecipeForm } from "./RecipeForm";
-import { FormProvider } from "../providers/FormProvider";
+import BaseModal from "../Modals/BaseModal";
+import SubSectionTitle from "../Misc/SubSectionTitle";
+import { useRecipeStore } from "../../stores";
+import { RecipeForm } from "../Recipes/RecipeForm";
+import { FormProvider } from "../../providers/FormProvider";
 import { X } from "lucide-react-native";
-const AddRecipe = () => {
-  const { createRecipe } = useRecipeStore();
+const EditRecipe = () => {
+  const { updateRecipe, selectedRecipe } = useRecipeStore();
   const [showActionsheet, setShowActionsheet] = useState(false);
 
   const handleClose = () => setShowActionsheet(!showActionsheet);
@@ -27,16 +28,14 @@ const AddRecipe = () => {
         bgColor={palette.primaryDark}
         onPress={handleClose}
       >
-        <ButtonText>Add New Recipe</ButtonText>
+        <ButtonText>Edit {selectedRecipe?.name || "Recipe"} </ButtonText>
       </Button>
-      <BaseModal
-        isOpen={showActionsheet}
-        onClose={handleClose}
-        size={"full"}
-        scrollableDisabled
-      >
+      <BaseModal isOpen={showActionsheet} onClose={handleClose} size={"full"}>
         <HStack justifyContent="space-between" alignItems="center">
-          <SubSectionTitle title="Add Recipe" hasButton={false} />
+          <SubSectionTitle
+            title={`Edit ${selectedRecipe?.name || "Recipe"} `}
+            hasButton={false}
+          />
           <Button onPress={handleClose} rounded={"$full"} variant="link">
             <ButtonIcon as={X} color={palette.primary} size={"xl"} />
           </Button>
@@ -44,7 +43,7 @@ const AddRecipe = () => {
         <VStack w={"$full"} gap={"$2"}>
           <FormProvider
             onSubmit={(values) => {
-              createRecipe(values);
+              updateRecipe(values);
               handleClose();
             }}
           >
@@ -56,4 +55,4 @@ const AddRecipe = () => {
   );
 };
 
-export default AddRecipe;
+export default EditRecipe;

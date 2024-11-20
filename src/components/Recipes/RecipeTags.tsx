@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 
 import { FlatList, HStack, Button, ButtonText } from "@gluestack-ui/themed";
-import palette from "../constants/palette";
-import { useRecipeStore } from "../stores";
+import palette from "../../constants/palette";
+import { useRecipeStore } from "../../stores";
 import { observer } from "mobx-react-lite";
 
 type RecipeTagsProps = {

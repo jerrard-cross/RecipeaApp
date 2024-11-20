@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { Image, View } from "@gluestack-ui/themed";
 import { router } from "expo-router";
-import Auth from "@/src/components/Auth";
 
 import { observer } from "mobx-react-lite";
 import { useSession } from "@/src/providers/SessionProvider";
+import Auth from "@/src/components/Auth/Auth";
 
 const AuthScreen = observer(() => {
   const { user } = useSession();

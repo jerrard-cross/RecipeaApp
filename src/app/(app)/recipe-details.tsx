@@ -2,7 +2,7 @@ import React from "react";
 import { useRecipeStore } from "@/src/stores";
 import { observer } from "mobx-react-lite";
 import { Stack } from "expo-router";
-import SectionTitle from "@/src/components/SectionTitle";
+import SectionTitle from "@/src/components/Misc/SectionTitle";
 import {
   Accordion,
   Image,
@@ -15,7 +15,7 @@ import palette from "@/src/constants/palette";
 import Ingredients from "@/src/components/RecipeDetails/Ingredients";
 import Directions from "@/src/components/RecipeDetails/Directions";
 import RecipeInfo from "@/src/components/RecipeDetails/RecipeInfo";
-import EditRecipe from "@/src/components/EditRecipe";
+import EditRecipe from "@/src/components/RecipeDetails/EditRecipe";
 
 const RecipeDetailsScreen = observer(() => {
   const { selectedRecipe } = useRecipeStore();

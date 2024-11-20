@@ -8,7 +8,7 @@ import {
   View,
 } from "@gluestack-ui/themed";
 import { Search } from "lucide-react-native";
-import useDebounce from "../hooks/useDebounce";
+import useDebounce from "../../hooks/useDebounce";
 
 interface SearchBarProps {
   value: string;

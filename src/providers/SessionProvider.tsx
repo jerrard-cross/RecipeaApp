@@ -104,6 +104,7 @@ export function SessionProvider(props: React.PropsWithChildren) {
         },
         signOut: () => {
           setRefreshToken(null);
+          setUser(null);
         },
         refreshToken,
         accessToken,

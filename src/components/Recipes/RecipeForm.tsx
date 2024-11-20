@@ -15,14 +15,14 @@ import {
   FormProvider,
   useFormContext,
   useFormNavigation,
-} from "../providers/FormProvider";
-import { RecipeModel } from "../models/RecipeModel";
-import { FormStep, STEPS } from "../lib/types";
-import { BasicInfoStep } from "./Steps/BasicInfoStep";
-import { TimeServingsStep } from "./Steps/TimeServingsStep";
-import { IngredientsStep } from "./Steps/IngredientsStep";
-import { InstructionsStep } from "./Steps/InstructionsStep";
-import palette from "../constants/palette";
+} from "../../providers/FormProvider";
+import { RecipeModel } from "../../models/RecipeModel";
+import { FormStep, STEPS } from "../../lib/types";
+import { BasicInfoStep } from "../Steps/BasicInfoStep";
+import { TimeServingsStep } from "../Steps/TimeServingsStep";
+import { IngredientsStep } from "../Steps/IngredientsStep";
+import { InstructionsStep } from "../Steps/InstructionsStep";
+import palette from "../../constants/palette";
 
 interface StepIndicatorProps {
   currentStep: FormStep;

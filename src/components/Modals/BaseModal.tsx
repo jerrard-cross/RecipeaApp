@@ -13,6 +13,7 @@ import {
   SafeAreaView,
 } from "@gluestack-ui/themed";
 import { DimensionValue, Platform, StyleSheet } from "react-native";
+import palette from "@/src/constants/palette";
 
 export interface BaseModalProps {
   isOpen?: boolean;
@@ -73,7 +74,7 @@ export const BaseModal: React.FC<BaseModalProps> = (props: BaseModalProps) => {
             backgroundColor={
               props.headerBackgroundColor
                 ? props.headerBackgroundColor
-                : "$primary500"
+                : palette.primary
             }
           >
             <VStack px={"$2"}>
@@ -120,7 +121,7 @@ export const BaseModal: React.FC<BaseModalProps> = (props: BaseModalProps) => {
                   props.testIDSecondary || `${commonTestId}secondaryButton`
                 }
                 borderWidth={1}
-                borderColor={props.buttonColor || "$primary500"}
+                borderColor={props.buttonColor || palette.primary}
                 rounded={"$full"}
                 backgroundColor={"$white"}
                 style={styles.footerButton}
@@ -128,7 +129,7 @@ export const BaseModal: React.FC<BaseModalProps> = (props: BaseModalProps) => {
                 isDisabled={props.secondaryDisabled}
                 onPress={props.onSecondaryAction}
               >
-                <ButtonText color={props.buttonColor || "$primary500"}>
+                <ButtonText color={props.buttonColor || palette.primary}>
                   {props.secondary}
                 </ButtonText>
               </Button>
@@ -138,7 +139,7 @@ export const BaseModal: React.FC<BaseModalProps> = (props: BaseModalProps) => {
                 accessibilityLabel={props.testIDPrimary}
                 testID={props.testIDPrimary || `${commonTestId}primaryButton`}
                 rounded={"$full"}
-                backgroundColor={props.buttonColor || "$primary500"}
+                backgroundColor={props.buttonColor || palette.primary}
                 style={styles.footerButton}
                 size="sm"
                 isDisabled={props.primaryDisabled}

@@ -10,12 +10,12 @@ import {
 import React, { useEffect } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import Carousel from "react-native-reanimated-carousel";
-import { useRecipeStore } from "../stores";
+import { useRecipeStore } from "../../stores";
 import { LinearGradient } from "expo-linear-gradient";
 import { Text } from "@gluestack-ui/themed";
 import Animated from "react-native-reanimated";
-import palette from "../constants/palette";
-import { RecipeModel } from "../models/RecipeModel";
+import palette from "../../constants/palette";
+import { RecipeModel } from "../../models/RecipeModel";
 import { router } from "expo-router";
 import { observer } from "mobx-react-lite";
 

@@ -6,7 +6,6 @@ import palette from "@/src/constants/palette";
 import { Icon } from "@gluestack-ui/themed";
 import { Minus, Plus } from "lucide-react-native";
 import { Text } from "@gluestack-ui/themed";
-import EditRecipe from "../EditRecipe";
 
 type RecipeInfoProps = {
   servings: number;

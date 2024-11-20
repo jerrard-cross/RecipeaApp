@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import SectionTitle from "./SectionTitle";
+import SectionTitle from "../Misc/SectionTitle";
 import { VStack } from "@gluestack-ui/themed";
 import SearchRecipes from "./SearchRecipes";
-import useDebounce from "../hooks/useDebounce";
-import { useRecipeStore } from "../stores";
+import useDebounce from "../../hooks/useDebounce";
+import { useRecipeStore } from "../../stores";
 
 const MyRecipes = () => {
   const { searchRecipes } = useRecipeStore();

@@ -1,9 +1,6 @@
-import { View, Text } from "react-native";
-import React, { useEffect } from "react";
-import { Redirect, router, Slot, Stack, Tabs } from "expo-router";
-import { useAuthStore } from "@/src/stores";
+import React from "react";
+import { Redirect, Stack } from "expo-router";
 import { observer } from "mobx-react-lite";
-import { Feather, FontAwesome6, Ionicons, Octicons } from "@expo/vector-icons";
 import { useSession } from "@/src/providers/SessionProvider";
 
 const AppLayout = observer(() => {

@@ -16,9 +16,9 @@ import {
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import { router } from "expo-router";
-import palette from "../constants/palette";
-import { useSession } from "../providers/SessionProvider";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
+import palette from "@/src/constants/palette";
+import { useSession } from "@/src/providers/SessionProvider";
 
 const Auth = observer(() => {
   const [username, setUsername] = useState("");

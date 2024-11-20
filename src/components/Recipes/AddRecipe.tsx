@@ -3,20 +3,19 @@ import {
   Button,
   ButtonIcon,
   ButtonText,
-  Center,
   HStack,
   VStack,
 } from "@gluestack-ui/themed";
-import palette from "../constants/palette";
+import palette from "../../constants/palette";
 
-import BaseModal from "./Modals/BaseModal";
-import SubSectionTitle from "./SubSectionTitle";
-import { useRecipeStore } from "../stores";
+import BaseModal from "../Modals/BaseModal";
+import SubSectionTitle from "../Misc/SubSectionTitle";
+import { useRecipeStore } from "../../stores";
 import { RecipeForm } from "./RecipeForm";
-import { FormProvider } from "../providers/FormProvider";
+import { FormProvider } from "../../providers/FormProvider";
 import { X } from "lucide-react-native";
-const EditRecipe = () => {
-  const { updateRecipe, selectedRecipe } = useRecipeStore();
+const AddRecipe = () => {
+  const { createRecipe } = useRecipeStore();
   const [showActionsheet, setShowActionsheet] = useState(false);
 
   const handleClose = () => setShowActionsheet(!showActionsheet);
@@ -28,14 +27,16 @@ const EditRecipe = () => {
         bgColor={palette.primaryDark}
         onPress={handleClose}
       >
-        <ButtonText>Edit {selectedRecipe?.name || "Recipe"} </ButtonText>
+        <ButtonText>Add New Recipe</ButtonText>
       </Button>
-      <BaseModal isOpen={showActionsheet} onClose={handleClose} size={"full"}>
+      <BaseModal
+        isOpen={showActionsheet}
+        onClose={handleClose}
+        size={"full"}
+        scrollableDisabled
+      >
         <HStack justifyContent="space-between" alignItems="center">
-          <SubSectionTitle
-            title={`Edit ${selectedRecipe?.name || "Recipe"} `}
-            hasButton={false}
-          />
+          <SubSectionTitle title="Add Recipe" hasButton={false} />
           <Button onPress={handleClose} rounded={"$full"} variant="link">
             <ButtonIcon as={X} color={palette.primary} size={"xl"} />
           </Button>
@@ -43,7 +44,7 @@ const EditRecipe = () => {
         <VStack w={"$full"} gap={"$2"}>
           <FormProvider
             onSubmit={(values) => {
-              updateRecipe(values);
+              createRecipe(values);
               handleClose();
             }}
           >
@@ -55,4 +56,4 @@ const EditRecipe = () => {
   );
 };
 
-export default EditRecipe;
+export default AddRecipe;
